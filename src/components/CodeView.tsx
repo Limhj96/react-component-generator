@@ -18,7 +18,7 @@ export function CodeView({ code }: CodeViewProps) {
       <div className="panel-header">
         <h3>코드</h3>
         <button className="btn-copy" onClick={handleCopy}>
-          {copied ? '복사됨!' : '복사'}
+          {copied ? '복사됨!' : '복사 →'}
         </button>
       </div>
       <pre className="code-block">

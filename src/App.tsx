@@ -50,9 +50,12 @@ function App() {
       <header className="app-header">
         <div className="brand-mark">RC</div>
         <div className="header-copy">
-          <span className="eyebrow">React Component Generator</span>
+          <span className="eyebrow">Workbench — React Component Generator</span>
           <h1>프롬프트로 만드는 UI 워크벤치</h1>
           <p>요청을 입력하고, 생성된 React 컴포넌트를 바로 미리보고 코드로 확인합니다.</p>
+          <p className="meta-line">
+            {activeProvider} · {components.length}개 컴포넌트 · 실시간 미리보기
+          </p>
         </div>
         <div className="header-meta" aria-label="현재 작업 상태">
           <div>
@@ -74,7 +77,7 @@ function App() {
         <aside className="settings-panel" aria-label="실행 설정">
           <div className="settings-header">
             <span className="panel-kicker">Runtime</span>
-            <h2>실행 설정</h2>
+            <h2>Runtime — 실행 설정</h2>
           </div>
           <div className="provider-select">
             <label htmlFor="provider">Provider</label>
@@ -132,7 +135,7 @@ function App() {
           <div className="results-header">
             <div>
               <span className="panel-kicker">Generated</span>
-              <h2>생성된 컴포넌트</h2>
+              <h2>Generated — 생성된 컴포넌트</h2>
             </div>
             <button className="btn-clear" onClick={clearAll}>
               전체 삭제

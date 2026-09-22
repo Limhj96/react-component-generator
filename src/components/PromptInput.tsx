@@ -32,7 +32,7 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
     <div className="prompt-section">
       <div className="prompt-heading">
         <span className="panel-kicker">Prompt</span>
-        <h2>무엇을 만들까요?</h2>
+        <h2>Prompt — 무엇을 만들까요?</h2>
       </div>
       <form onSubmit={handleSubmit} className="prompt-form">
         <textarea
@@ -55,7 +55,7 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
           {isLoading ? (
             <span className="loading-spinner">생성 중...</span>
           ) : (
-            '컴포넌트 생성'
+            '컴포넌트 생성 →'
           )}
         </button>
       </form>

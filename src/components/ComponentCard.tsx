@@ -41,7 +41,7 @@ export function ComponentCard({ component, onRemove, onRegenerate, isLoading }: 
             onClick={() => onRegenerate(component.prompt)}
             disabled={isLoading}
           >
-            {isLoading ? '생성 중...' : '재생성'}
+            {isLoading ? '생성 중...' : '재생성 →'}
           </button>
           <button
             className="btn-remove"
