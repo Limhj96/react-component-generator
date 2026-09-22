@@ -1,8 +1,13 @@
 import { useState, useCallback } from 'react';
 import type { GeneratedComponent, Provider } from '../types';
+import { STORAGE_KEYS } from '../utils/storage';
+import { usePersistedState } from './usePersistedState';
+
+const MAX_PROMPT_HISTORY = 50;
 
 interface UseComponentGeneratorReturn {
   components: GeneratedComponent[];
+  promptHistory: string[];
   isLoading: boolean;
   error: string | null;
   generate: (prompt: string, apiKey: string | undefined, provider: Provider) => Promise<void>;
@@ -10,14 +15,35 @@ interface UseComponentGeneratorReturn {
   clearAll: () => void;
 }
 
+/** localStorage에서 읽은 JSON은 createdAt이 문자열이므로 Date 인스턴스로 되살린다. */
+export function reviveComponentDates(components: GeneratedComponent[]): GeneratedComponent[] {
+  return components.map((component) => ({
+    ...component,
+    createdAt: new Date(component.createdAt),
+  }));
+}
+
 export function useComponentGenerator(): UseComponentGeneratorReturn {
-  const [components, setComponents] = useState<GeneratedComponent[]>([]);
+  const [components, setComponents] = usePersistedState<GeneratedComponent[]>(
+    STORAGE_KEYS.components,
+    [],
+    reviveComponentDates
+  );
+  const [promptHistory, setPromptHistory] = usePersistedState<string[]>(
+    STORAGE_KEYS.promptHistory,
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const generate = useCallback(async (prompt: string, apiKey: string | undefined, provider: Provider) => {
     setIsLoading(true);
     setError(null);
+
+    setPromptHistory((prev) => {
+      if (prev[0] === prompt) return prev;
+      return [prompt, ...prev].slice(0, MAX_PROMPT_HISTORY);
+    });
 
     try {
       const res = await fetch('/api/generate', {
@@ -46,15 +72,15 @@ export function useComponentGenerator(): UseComponentGeneratorReturn {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [setComponents, setPromptHistory]);
 
   const removeComponent = useCallback((id: string) => {
     setComponents((prev) => prev.filter((c) => c.id !== id));
-  }, []);
+  }, [setComponents]);
 
   const clearAll = useCallback(() => {
     setComponents([]);
-  }, []);
+  }, [setComponents]);
 
-  return { components, isLoading, error, generate, removeComponent, clearAll };
+  return { components, promptHistory, isLoading, error, generate, removeComponent, clearAll };
 }
