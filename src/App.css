@@ -331,6 +331,13 @@
   color: var(--text-soft);
 }
 
+.prompt-error {
+  grid-column: 1 / -1;
+  color: var(--danger);
+  font-size: 0.88rem;
+  margin: -4px 0 0;
+}
+
 .btn-generate {
   height: 52px;
   padding: 0 22px;
